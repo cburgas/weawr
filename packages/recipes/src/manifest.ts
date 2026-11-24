@@ -33,6 +33,13 @@ export const RECIPE_REVISIONS: readonly RecipeRevision[] = [
       'new placeholders: {{runKey}}, {{mergeLabel}}, {{worktree}} (the run\'s own working tree, which the briefs now name as the only place to read, run and edit), {{weawr}} (the weawr command that runs this team, which is what an agent is told to run)',
     ],
   },
+  {
+    revision: 3, resultSchema: 1, templates: ['default.md', 'review-lead.md', 'review-security.md', 'review-usability.md', 'smoke.md'],
+    summary: 'revision 2 plus an idempotent PR step: check `gh pr list --head` before `gh pr create` and reuse an existing PR',
+    changes: [
+      'the implementer checks `gh pr list --head "$(git branch --show-current)" --state open` before `gh pr create`; an existing PR is reused instead of opening a duplicate on a retried turn',
+    ],
+  },
 ];
 
 export const LATEST_REVISION = RECIPE_REVISIONS[RECIPE_REVISIONS.length - 1].revision;

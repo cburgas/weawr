@@ -18,7 +18,7 @@ test('every shipped revision has every template it lists, and each template chec
       assert.ok(check.ok, `revision ${r.revision} ${name}: ${check.problems.join('; ')}`);
     }
   }
-  assert.equal(LATEST_REVISION, 2); assert.equal(revision(3), null);
+  assert.equal(LATEST_REVISION, 3); assert.ok(revision(3));
 });
 
 // ---- revision 1: the pinned policy of the original briefs
@@ -54,6 +54,12 @@ test('revision 2: every reviewing brief asks for a structured verdict against th
     assert.match(brief, /do not (push, commit,\s+|push, do not commit, do not )merge/i, `${name} must tell the reviewer not to merge`);
     assert.doesNotMatch(brief, /unless the issue says you may/);
   }
+});
+
+test('revision 3: checks for an existing PR before creating one', () => {
+  const brief = read(3, 'default.md');
+  assert.match(brief, /gh pr list --head "\$\(git branch --show-current\)" --state open/);
+  assert.match(brief, /reuse its URL instead of opening another/);
 });
 
 test('in every revision, briefs that a role can run leave room for how to nudge, and reviewers do not carry the keep-mergeable duty', () => {
